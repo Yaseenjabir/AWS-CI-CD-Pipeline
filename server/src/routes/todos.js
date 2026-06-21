@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
 });
 
 router.patch('/:id', async (req, res) => {
-  const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
   if (!todo) return res.status(404).json({ message: 'Not found' });
   res.json(todo);
 });
