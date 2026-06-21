@@ -4,9 +4,9 @@ import { vi, describe, it, expect, beforeEach } from 'vitest'
 import App from '../App'
 
 beforeEach(() => {
-  global.fetch = vi.fn(() =>
+  vi.stubGlobal('fetch', vi.fn(() =>
     Promise.resolve({ json: () => Promise.resolve([]) })
-  ) as unknown as typeof fetch
+  ))
 })
 
 describe('App', () => {
@@ -23,9 +23,10 @@ describe('App', () => {
 
   it('adds a todo when form is submitted', async () => {
     const newTodo = { _id: '1', title: 'Buy milk', completed: false }
-    global.fetch = vi.fn()
+    vi.stubGlobal('fetch', vi.fn()
       .mockResolvedValueOnce({ json: () => Promise.resolve([]) })
-      .mockResolvedValueOnce({ json: () => Promise.resolve(newTodo) }) as unknown as typeof fetch
+      .mockResolvedValueOnce({ json: () => Promise.resolve(newTodo) })
+    )
 
     render(<App />)
     await userEvent.type(screen.getByPlaceholderText('Add a new todo...'), 'Buy milk')
