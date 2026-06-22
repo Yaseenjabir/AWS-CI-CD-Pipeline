@@ -79,6 +79,12 @@ jobs:
       - name: Sync build to S3
         run: aws s3 sync client/dist s3://${{ secrets.S3_BUCKET }} --delete
 
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+
       - name: Deploy Node.js to EC2
         uses: appleboy/ssh-action@v1
         with:
